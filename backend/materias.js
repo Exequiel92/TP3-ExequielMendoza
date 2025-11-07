@@ -30,6 +30,8 @@ router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
 });
 
 router.post("/", validarMaterias, verificarValidaciones, async (req, res) => {
+  const { materia, codigo, año } = req.body;
+
   const [resultado] = await db.execute(
     "INSERT INTO materias (materia, codigo, año) VALUES (?, ?, ?)",
     [materia, codigo, año]
