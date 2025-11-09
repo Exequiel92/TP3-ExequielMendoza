@@ -4,35 +4,27 @@
 GET {{url}}/alumnos
 
 ###
-
-### GET alumno por ID
 GET {{url}}/alumnos/1
 
 ###
-
-### POST crear un nuevo alumno
 POST {{url}}/alumnos
 Content-Type: application/json
 
 {
-  "nombre": "Juan",
-  "apellido": "Perez",
-  "dni": 12345678
+  "nombre": "Laura",
+  "apellido": "Fernández",
+  "dni": 49681322
 }
 
 ###
-
-### PUT actualizar un alumno
-PUT {{url}}/alumnos/1
+PUT {{url}}/alumnos/12
 Content-Type: application/json
 
 {
-  "nombre": "Juan Carlos",
-  "apellido": "Perez",
-  "dni": 12345679
+  "nombre": "Tomás",
+  "apellido": "Córdoba",
+  "dni": 50003147
 }
 
 ###
-
-### DELETE eliminar un alumno
-DELETE {{url}}/alumnos/3
+DELETE {{url}}/alumnos/1

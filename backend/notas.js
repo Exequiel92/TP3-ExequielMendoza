@@ -9,31 +9,34 @@ import {
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const [notas] = await db.execute(`
-    SELECT 
-      n.id, 
-      a.nombre AS alumno_nombre, 
-      a.apellido AS alumno_apellido, 
-      m.materia AS materia_nombre, 
-      n.nota1, 
-      n.nota2, 
-      n.nota3 
-    FROM notas n
-    JOIN alumnos a ON n.alumno_id = a.id
-    JOIN materias m ON n.materia_id = m.id
-  `);
+  let sql =
+    "SELECT n.id, a.nombre AS nombre, a.apellido AS apellido, m.materia AS materia, n.nota1, n.nota2, n.nota3 \
+    FROM notas n \
+    JOIN alumnos a ON n.alumno_id = a.id \
+    JOIN materias m ON n.materia_id = m.id";
+
+  const [notas] = await db.execute(sql);
   res.json({ success: true, notas });
 });
 
 router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
   const id = Number(req.params.id);
 
-  const [notas] = await db.execute("SELECT * FROM notas WHERE id = ?", [id]);
+  const sql = `
+    SELECT n.id, a.nombre AS nombre, a.apellido AS apellido, m.materia AS materia, n.nota1, n.nota2, n.nota3
+    FROM notas n
+    JOIN alumnos a ON n.alumno_id = a.id
+    JOIN materias m ON n.materia_id = m.id
+    WHERE n.id = ?
+  `;
+
+  const [notas] = await db.execute(sql, [id]);
 
   if (notas.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Nota no encontrada" });
+    return res.status(404).json({
+      success: false,
+      message: "Nota no encontrada",
+    });
   }
 
   res.json({ success: true, nota: notas[0] });

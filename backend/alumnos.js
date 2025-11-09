@@ -92,6 +92,19 @@ router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
       .json({ success: false, message: "Alumno no encontrado" });
   }
 
+  const [alumnoRegistrado] = await db.query(
+    "SELECT * FROM notas WHERE materia_id = ?",
+    [id]
+  );
+
+  if (alumnoRegistrado.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "No se puede eliminar este alumno, ya que se le ha asignado una o más materias.",
+    });
+  }
+
   await db.execute("DELETE FROM alumnos WHERE id = ?", [id]);
 
   res.json({ success: true, message: "Alumno eliminado exitosamente" });

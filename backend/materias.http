@@ -1,38 +1,30 @@
 @url = http://localhost:3000
 
-### GET todas las materias
+###
 GET {{url}}/materias
 
 ###
-
-### GET materia por ID
 GET {{url}}/materias/1
 
 ###
-
-### POST crear una nueva materia
 POST {{url}}/materias
 Content-Type: application/json
 
 {
-  "materia": "Programación III",
-  "codigo": "P3",
+  "materia": "Física",
+  "codigo": "FIS",
   "año": 2024
 }
 
 ###
-
-### PUT actualizar una materia
 PUT {{url}}/materias/1
 Content-Type: application/json
 
 {
-  "materia": "Programación Avanzada III",
-  "codigo": "PA3",
+  "materia": "Química",
+  "codigo": "QUI",
   "año": 2024
 }
 
 ###
-
-### DELETE eliminar una materia
-DELETE {{url}}/materias/2
+DELETE {{url}}/materias/1

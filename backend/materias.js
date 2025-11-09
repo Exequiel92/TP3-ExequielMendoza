@@ -86,6 +86,19 @@ router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
       .json({ success: false, message: "Materia no encontrada" });
   }
 
+  const [mareriaRegistrada] = await db.query(
+    "SELECT * FROM notas WHERE materia_id = ?",
+    [id]
+  );
+
+  if (mareriaRegistrada.length > 0) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "No se puede eliminar esta materia, ya que se encuentra registrada en uno o más alumnos.",
+    });
+  }
+
   await db.query("DELETE FROM materias WHERE id = ?", [id]);
 
   res.json({ success: true, message: "Materia eliminada exitosamente" });

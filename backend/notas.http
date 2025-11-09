@@ -1,42 +1,34 @@
 @url = http://localhost:3000
 
-### GET todas las notas
+###
 GET {{url}}/notas
 
-###
-
-### GET nota por ID
+### 
 GET {{url}}/notas/1
 
 ###
-
-### POST crear una nueva nota
 POST {{url}}/notas
 Content-Type: application/json
 
 {
   "alumno_id": 1,
   "materia_id": 1,
-  "nota1": 8.5,
+  "nota1": 8.50,
   "nota2": 7,
   "nota3": 9
 }
 
 ###
-
-### PUT actualizar una nota
 PUT {{url}}/notas/1
 Content-Type: application/json
 
 {
   "alumno_id": 1,
-  "materia_id": 1,
+  "materia_id":1,
   "nota1": 9,
   "nota2": 8,
   "nota3": 10
 }
 
 ###
-
-### DELETE eliminar una nota
-DELETE {{url}}/notas/2
+DELETE {{url}}/notas/1

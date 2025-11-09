@@ -1,0 +1,47 @@
+@url = http://localhost:3000
+
+### 
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "exequiel_mendoza",
+  "contraseña": "Exequiel123!"
+}
+
+###
+@token = {{login.response.body.token}}
+
+### 
+GET {{url}}/usuarios
+Authorization: Bearer {{token}}
+
+### 
+GET {{url}}/usuarios/1
+Authorization: Bearer {{token}}
+
+### 
+POST {{url}}/usuarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "exequiel_mendoza",
+  "email": "exequiel@gmail.com",
+  "contraseña": "Exequiel123!!"
+}
+
+### 
+PUT {{url}}/usuarios/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "fernando_garcia",
+  "email": "fernando@hotmail.com",
+  "contraseña": "Fernando123!!"
+}
+
+### 
+DELETE {{url}}/usuarios/1
+Authorization: Bearer {{token}}
