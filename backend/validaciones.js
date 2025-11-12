@@ -182,3 +182,8 @@ export const validarUsuarios = [
       "La contraseña debe tener al menos 8 caracteres, e incluir una mayúscula, una minúscula, un número y un símbolo."
     ),
 ];
+
+export const validarLogin = [
+  body("username").notEmpty().withMessage("El username es obligatorio"),
+  body("contraseña").notEmpty().withMessage("La contraseña es obligatoria"),
+];

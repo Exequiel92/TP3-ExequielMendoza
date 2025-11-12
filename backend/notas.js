@@ -5,10 +5,11 @@ import {
   validarNotas,
   validarId,
 } from "./validaciones.js";
+import { autenticacion, autorizacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", autenticacion, autorizacion, async (req, res) => {
   let sql =
     "SELECT n.id, a.nombre AS nombre, a.apellido AS apellido, m.materia AS materia, n.nota1, n.nota2, n.nota3 \
     FROM notas n \
@@ -19,10 +20,16 @@ router.get("/", async (req, res) => {
   res.json({ success: true, notas });
 });
 
-router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.get(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const sql = `
+    const sql = `
     SELECT n.id, a.nombre AS nombre, a.apellido AS apellido, m.materia AS materia, n.nota1, n.nota2, n.nota3
     FROM notas n
     JOIN alumnos a ON n.alumno_id = a.id
@@ -30,52 +37,62 @@ router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
     WHERE n.id = ?
   `;
 
-  const [notas] = await db.execute(sql, [id]);
+    const [notas] = await db.execute(sql, [id]);
 
-  if (notas.length === 0) {
-    return res.status(404).json({
-      success: false,
-      message: "Nota no encontrada",
+    if (notas.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Nota no encontrada",
+      });
+    }
+
+    res.json({ success: true, nota: notas[0] });
+  }
+);
+
+router.post(
+  "/",
+  autenticacion,
+  autorizacion,
+  validarNotas,
+  verificarValidaciones,
+  async (req, res) => {
+    const { alumno_id, materia_id, nota1, nota2, nota3 } = req.body;
+
+    const [resultado] = await db.execute(
+      "INSERT INTO notas (alumno_id, materia_id, nota1, nota2, nota3) VALUES (?, ?, ?, ?, ?)",
+      [alumno_id, materia_id, nota1, nota2, nota3]
+    );
+
+    const [alumnos] = await db.execute(
+      "SELECT nombre, apellido FROM alumnos WHERE id = ?",
+      [alumno_id]
+    );
+    const [materias] = await db.execute(
+      "SELECT materia FROM materias WHERE id = ?",
+      [materia_id]
+    );
+
+    res.status(201).json({
+      success: true,
+      data: {
+        id: resultado.insertId,
+        alumno: `${alumnos[0].nombre} ${alumnos[0].apellido}`,
+        materia: materias[0].materia,
+        nota1,
+        nota2,
+        nota3,
+        promedio: (nota1 + nota2 + nota3) / 3,
+      },
+      message: "Nota creada exitosamente",
     });
   }
-
-  res.json({ success: true, nota: notas[0] });
-});
-
-router.post("/", validarNotas, verificarValidaciones, async (req, res) => {
-  const { alumno_id, materia_id, nota1, nota2, nota3 } = req.body;
-
-  const [resultado] = await db.execute(
-    "INSERT INTO notas (alumno_id, materia_id, nota1, nota2, nota3) VALUES (?, ?, ?, ?, ?)",
-    [alumno_id, materia_id, nota1, nota2, nota3]
-  );
-
-  const [alumnos] = await db.execute(
-    "SELECT nombre, apellido FROM alumnos WHERE id = ?",
-    [alumno_id]
-  );
-  const [materias] = await db.execute(
-    "SELECT materia FROM materias WHERE id = ?",
-    [materia_id]
-  );
-
-  res.status(201).json({
-    success: true,
-    data: {
-      id: resultado.insertId,
-      alumno: `${alumnos[0].nombre} ${alumnos[0].apellido}`,
-      materia: materias[0].materia,
-      nota1,
-      nota2,
-      nota3,
-      promedio: (nota1 + nota2 + nota3) / 3,
-    },
-    message: "Nota creada exitosamente",
-  });
-});
+);
 
 router.put(
   "/:id",
+  autenticacion,
+  autorizacion,
   validarId,
   validarNotas,
   verificarValidaciones,
@@ -120,20 +137,27 @@ router.put(
   }
 );
 
-router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.delete(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const [notas] = await db.execute("SELECT * FROM notas WHERE id = ?", [id]);
+    const [notas] = await db.execute("SELECT * FROM notas WHERE id = ?", [id]);
 
-  if (notas.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Nota no encontrada" });
+    if (notas.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Nota no encontrada" });
+    }
+
+    await db.execute("DELETE FROM notas WHERE id = ?", [id]);
+
+    res.json({ success: true, message: "Nota eliminada exitosamente" });
   }
-
-  await db.execute("DELETE FROM notas WHERE id = ?", [id]);
-
-  res.json({ success: true, message: "Nota eliminada exitosamente" });
-});
+);
 
 export default router;

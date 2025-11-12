@@ -5,49 +5,66 @@ import {
   validarAlumnos,
   validarId,
 } from "./validaciones.js";
+import { autenticacion, autorizacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", autenticacion, autorizacion, async (req, res) => {
   const [alumnos] = await db.execute(
     "SELECT nombre, apellido, dni FROM alumnos"
   );
   res.json({ success: true, alumnos });
 });
 
-router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.get(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const [alumnos] = await db.execute("SELECT * FROM alumnos WHERE id = ?", [
-    id,
-  ]);
+    const [alumnos] = await db.execute("SELECT * FROM alumnos WHERE id = ?", [
+      id,
+    ]);
 
-  if (alumnos.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Alumno no encontrado" });
+    if (alumnos.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Alumno no encontrado" });
+    }
+
+    res.json({ success: true, alumno: alumnos[0] });
   }
+);
 
-  res.json({ success: true, alumno: alumnos[0] });
-});
+router.post(
+  "/",
+  autenticacion,
+  autorizacion,
+  validarAlumnos,
+  verificarValidaciones,
+  async (req, res) => {
+    const { nombre, apellido, dni } = req.body;
 
-router.post("/", validarAlumnos, verificarValidaciones, async (req, res) => {
-  const { nombre, apellido, dni } = req.body;
+    const [resultado] = await db.execute(
+      "INSERT INTO alumnos (nombre, apellido, dni) VALUES (?, ?, ?)",
+      [nombre, apellido, dni]
+    );
 
-  const [resultado] = await db.execute(
-    "INSERT INTO alumnos (nombre, apellido, dni) VALUES (?, ?, ?)",
-    [nombre, apellido, dni]
-  );
-
-  res.status(201).json({
-    success: true,
-    data: { id: resultado.insertId, nombre, apellido, dni },
-    message: "Alumno creado exitosamente",
-  });
-});
+    res.status(201).json({
+      success: true,
+      data: { id: resultado.insertId, nombre, apellido, dni },
+      message: "Alumno creado exitosamente",
+    });
+  }
+);
 
 router.put(
   "/:id",
+  autenticacion,
+  autorizacion,
   validarId,
   validarAlumnos,
   verificarValidaciones,
@@ -79,35 +96,42 @@ router.put(
   }
 );
 
-router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.delete(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const [alumnos] = await db.execute("SELECT * FROM alumnos WHERE id = ?", [
-    id,
-  ]);
+    const [alumnos] = await db.execute("SELECT * FROM alumnos WHERE id = ?", [
+      id,
+    ]);
 
-  if (alumnos.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Alumno no encontrado" });
+    if (alumnos.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Alumno no encontrado" });
+    }
+
+    const [alumnoRegistrado] = await db.query(
+      "SELECT * FROM notas WHERE materia_id = ?",
+      [id]
+    );
+
+    if (alumnoRegistrado.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "No se puede eliminar este alumno, ya que se le ha asignado una o más materias.",
+      });
+    }
+
+    await db.execute("DELETE FROM alumnos WHERE id = ?", [id]);
+
+    res.json({ success: true, message: "Alumno eliminado exitosamente" });
   }
-
-  const [alumnoRegistrado] = await db.query(
-    "SELECT * FROM notas WHERE materia_id = ?",
-    [id]
-  );
-
-  if (alumnoRegistrado.length > 0) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "No se puede eliminar este alumno, ya que se le ha asignado una o más materias.",
-    });
-  }
-
-  await db.execute("DELETE FROM alumnos WHERE id = ?", [id]);
-
-  res.json({ success: true, message: "Alumno eliminado exitosamente" });
-});
+);
 
 export default router;

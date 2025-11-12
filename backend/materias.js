@@ -5,47 +5,64 @@ import {
   validarMaterias,
   validarId,
 } from "./validaciones.js";
+import { autenticacion, autorizacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", autenticacion, autorizacion, async (req, res) => {
   const [materias] = await db.execute("SELECT * FROM materias");
   res.json({ success: true, materias });
 });
 
-router.get("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.get(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const [materias] = await db.execute("SELECT * FROM materias WHERE id = ?", [
-    id,
-  ]);
+    const [materias] = await db.execute("SELECT * FROM materias WHERE id = ?", [
+      id,
+    ]);
 
-  if (materias.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Materia no encontrada" });
+    if (materias.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Materia no encontrada" });
+    }
+
+    res.json({ success: true, materia: materias[0] });
   }
+);
 
-  res.json({ success: true, materia: materias[0] });
-});
+router.post(
+  "/",
+  autenticacion,
+  autorizacion,
+  validarMaterias,
+  verificarValidaciones,
+  async (req, res) => {
+    const { materia, codigo, año } = req.body;
 
-router.post("/", validarMaterias, verificarValidaciones, async (req, res) => {
-  const { materia, codigo, año } = req.body;
+    const [resultado] = await db.execute(
+      "INSERT INTO materias (materia, codigo, año) VALUES (?, ?, ?)",
+      [materia, codigo, año]
+    );
 
-  const [resultado] = await db.execute(
-    "INSERT INTO materias (materia, codigo, año) VALUES (?, ?, ?)",
-    [materia, codigo, año]
-  );
-
-  res.status(201).json({
-    success: true,
-    data: { id: resultado.insertId, materia, codigo, año },
-    message: "Materia creada exitosamente",
-  });
-});
+    res.status(201).json({
+      success: true,
+      data: { id: resultado.insertId, materia, codigo, año },
+      message: "Materia creada exitosamente",
+    });
+  }
+);
 
 router.put(
   "/:id",
+  autenticacion,
+  autorizacion,
   validarId,
   validarMaterias,
   verificarValidaciones,
@@ -75,33 +92,42 @@ router.put(
   }
 );
 
-router.delete("/:id", validarId, verificarValidaciones, async (req, res) => {
-  const id = Number(req.params.id);
+router.delete(
+  "/:id",
+  autenticacion,
+  autorizacion,
+  validarId,
+  verificarValidaciones,
+  async (req, res) => {
+    const id = Number(req.params.id);
 
-  const [materia] = await db.query("SELECT * FROM materias WHERE id = ?", [id]);
+    const [materia] = await db.query("SELECT * FROM materias WHERE id = ?", [
+      id,
+    ]);
 
-  if (materia.length === 0) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Materia no encontrada" });
+    if (materia.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Materia no encontrada" });
+    }
+
+    const [mareriaRegistrada] = await db.query(
+      "SELECT * FROM notas WHERE materia_id = ?",
+      [id]
+    );
+
+    if (mareriaRegistrada.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "No se puede eliminar esta materia, ya que se encuentra registrada en uno o más alumnos.",
+      });
+    }
+
+    await db.query("DELETE FROM materias WHERE id = ?", [id]);
+
+    res.json({ success: true, message: "Materia eliminada exitosamente" });
   }
-
-  const [mareriaRegistrada] = await db.query(
-    "SELECT * FROM notas WHERE materia_id = ?",
-    [id]
-  );
-
-  if (mareriaRegistrada.length > 0) {
-    return res.status(400).json({
-      success: false,
-      message:
-        "No se puede eliminar esta materia, ya que se encuentra registrada en uno o más alumnos.",
-    });
-  }
-
-  await db.query("DELETE FROM materias WHERE id = ?", [id]);
-
-  res.json({ success: true, message: "Materia eliminada exitosamente" });
-});
+);
 
 export default router;
