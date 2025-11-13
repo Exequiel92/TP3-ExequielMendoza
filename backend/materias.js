@@ -4,12 +4,13 @@ import {
   verificarValidaciones,
   validarMaterias,
   validarId,
+  validarModificarMaterias,
 } from "./validaciones.js";
-import { autenticacion, autorizacion } from "./auth.js";
+import { autenticacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", autenticacion, autorizacion, async (req, res) => {
+router.get("/", autenticacion, async (req, res) => {
   const [materias] = await db.execute("SELECT * FROM materias");
   res.json({ success: true, materias });
 });
@@ -17,7 +18,6 @@ router.get("/", autenticacion, autorizacion, async (req, res) => {
 router.get(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {
@@ -40,7 +40,6 @@ router.get(
 router.post(
   "/",
   autenticacion,
-  autorizacion,
   validarMaterias,
   verificarValidaciones,
   async (req, res) => {
@@ -62,9 +61,8 @@ router.post(
 router.put(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
-  validarMaterias,
+  validarModificarMaterias,
   verificarValidaciones,
   async (req, res) => {
     const id = Number(req.params.id);
@@ -95,7 +93,6 @@ router.put(
 router.delete(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {

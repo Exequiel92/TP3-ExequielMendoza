@@ -1,16 +1,164 @@
-@url=http://localhost:3000
+@url = http://localhost:3000
 
-###
+###Login
+
 # @name login
+
 POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "exequiel_mendoza",
-    "contraseña": "Exequiel123!"
+  "username": "exequielmendoza",
+  "contraseña": "Exequiel123!!"
 }
 
 ###
-@token = {{login.response.body.token}}  
+@token = {{login.response.body.token}}
+
+### USUARIOS
+
+### 
+GET {{url}}/usuarios
+Authorization: Bearer {{token}}
+
+### 
+GET {{url}}/usuarios/1
+Authorization: Bearer {{token}}
+
+### 
+POST {{url}}/usuarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "pabloperez",
+  "email": "pabloperez@gmail.com",
+  "contraseña": "Pablo123!"
+}
+
+### 
+PUT {{url}}/usuarios/12
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "fer_garcia",
+  "email": "fer_nando@hotmail.com"
+}
+
+### 
+DELETE {{url}}/usuarios/1
+Authorization: Bearer {{token}}
 
 
+### ALUMNOS
+
+### 
+GET {{url}}/alumnos
+Authorization: Bearer {{token}}
+
+###
+GET {{url}}/alumnos/1
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/alumnos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Ramiro",
+  "apellido": "Pioli",
+  "dni": 40681322
+}
+
+###
+PUT {{url}}/alumnos/12
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Tomás",
+  "apellido": "Córdoba",
+  "dni": 50003147
+}
+
+###
+DELETE {{url}}/alumnos/13
+Authorization: Bearer {{token}}
+
+### MATERIAS
+
+###
+GET {{url}}/materias
+Authorization: Bearer {{token}}
+
+###
+GET {{url}}/materias/1
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/materias
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "materia": "Educación Física",
+  "codigo": "EFI",
+  "año": 2020
+}
+
+###
+PUT {{url}}/materias/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "materia": "Química",
+  "codigo": "QUI",
+  "año": 2024
+}
+
+###
+DELETE {{url}}/materias/1
+Authorization: Bearer {{token}}
+
+### NOTAS
+
+###
+GET {{url}}/notas
+Authorization: Bearer {{token}}
+
+### 
+GET {{url}}/notas/1
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/notas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "alumno_id": 1,
+  "materia_id": 1,
+  "nota1": 8.50,
+  "nota2": 7,
+  "nota3": 9
+}
+
+###
+PUT {{url}}/notas/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "alumno_id": 1,
+  "materia_id":1,
+  "nota1": 9,
+  "nota2": 8,
+  "nota3": 10
+}
+
+###
+DELETE {{url}}/notas/1
+Authorization: Bearer {{token}}

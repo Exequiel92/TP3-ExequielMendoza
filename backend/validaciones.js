@@ -132,7 +132,7 @@ export const validarNotas = [
 
 export const validarUsuarios = [
   body("username")
-    .isString()
+    .isAlpha()
     .withMessage("El nombre de usuario debe ser una cadena de texto.")
     .trim()
     .notEmpty()
@@ -183,7 +183,142 @@ export const validarUsuarios = [
     ),
 ];
 
+export const validarModificarUsuarios = [
+  body("username")
+    .isAlpha()
+    .withMessage("El nombre de usuario debe ser una cadena de texto.")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre de usuario es obligatorio.")
+    .isLength({ max: 45 })
+    .withMessage("El nombre de usuario no puede tener más de 45 caracteres.")
+    .custom(async (value, { req }) => {
+      const { id } = req.params;
+      const [rows] = await db.execute(
+        "SELECT id FROM usuarios WHERE username = ? AND id != ?",
+        [value, id]
+      );
+      if (rows.length > 0) {
+        throw new Error("Usuario ya está registrado");
+      }
+      return true;
+    }),
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("El correo electrónico es obligatorio.")
+    .isEmail()
+    .withMessage("Debe proporcionar un formato de email válido.")
+    .normalizeEmail()
+    .custom(async (value, { req }) => {
+      const { id } = req.params;
+      const [rows] = await db.execute(
+        "SELECT id FROM usuarios WHERE email = ? AND id != ?",
+        [value, id]
+      );
+      if (rows.length > 0) {
+        throw new Error("Correo electrónico ya está registrado");
+      }
+      return true;
+    }),
+];
+
 export const validarLogin = [
   body("username").notEmpty().withMessage("El username es obligatorio"),
   body("contraseña").notEmpty().withMessage("La contraseña es obligatoria"),
 ];
+
+export const validarModificarAlumnos = [
+  body("nombre")
+    .isString()
+    .withMessage("El nombre debe ser una cadena de texto.")
+    .trim()
+    .notEmpty()
+    .withMessage("El nombre es obligatorio.")
+    .isLength({ max: 45 })
+    .withMessage("El nombre no puede tener más de 45 caracteres."),
+
+  body("apellido")
+    .isString()
+    .withMessage("El apellido debe ser una cadena de texto.")
+    .trim()
+    .notEmpty()
+    .withMessage("El apellido es obligatorio.")
+    .isLength({ max: 45 })
+    .withMessage("El apellido no puede tener más de 45 caracteres."),
+
+  body("dni")
+    .isInt({ min: 1, max: 99999999 })
+    .withMessage("El DNI debe ser un número válido de hasta 8 dígitos.")
+    .custom(async (dni, { req }) => {
+      const { id } = req.params;
+      const [rows] = await db.execute(
+        "SELECT id FROM alumnos WHERE dni = ? AND id != ?",
+        [dni, id]
+      );
+      if (rows.length > 0) {
+        throw new Error("Dni ya registrado");
+      }
+      return true;
+    }),
+];
+
+export const validarModificarMaterias = [
+  body("materia")
+    .isString()
+    .withMessage("La materia debe ser una cadena de texto.")
+    .trim()
+    .notEmpty()
+    .withMessage("La materia es obligatorio.")
+    .isLength({ max: 45 })
+    .withMessage("La materia no puede tener más de 45 caracteres.")
+    .custom(async (materia, { req }) => {
+      const { id } = req.params;
+      const [rows] = await db.execute(
+        "SELECT id FROM materias WHERE materia = ? AND id != ?",
+        [materia, id]
+      );
+      if (rows.length > 0) {
+        throw new Error("Materia ya registrada");
+      }
+      return true;
+    }),
+
+  body("codigo")
+    .isString()
+    .withMessage("El código debe ser una cadena de texto.")
+    .trim()
+    .notEmpty()
+    .withMessage("El código es obligatorio.")
+    .isLength({ max: 3 })
+    .withMessage("El código no puede tener más de 3 caracteres.")
+    .custom(async (codigo, { req }) => {
+      const { id } = req.params;
+      const [rows] = await db.execute(
+        "SELECT id FROM materias WHERE codigo = ? AND id != ?",
+        [codigo, id]
+      );
+      if (rows.length > 0) {
+        throw new Error("Código ya registrado");
+      }
+      return true;
+    }),
+
+  body("año")
+    .isInt({ min: 1900, max: 2150 })
+    .withMessage("El año debe ser un número válido."),
+];
+
+// export const validarModificarNotas = [
+//   body("nota1")
+//     .isFloat({ min: 0, max: 10 })
+//     .withMessage("La nota 1 debe ser un número entre 0 y 10."),
+
+//   body("nota2")
+//     .isFloat({ min: 0, max: 10 })
+//     .withMessage("La nota 2 debe ser un número entre 0 y 10."),
+
+//   body("nota3")
+//     .isFloat({ min: 0, max: 10 })
+//     .withMessage("La nota 3 debe ser un número entre 0 y 10."),
+// ];

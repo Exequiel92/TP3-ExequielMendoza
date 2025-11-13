@@ -3,15 +3,16 @@ import { db } from "./db.js";
 import {
   verificarValidaciones,
   validarAlumnos,
+  validarModificarAlumnos,
   validarId,
 } from "./validaciones.js";
-import { autenticacion, autorizacion } from "./auth.js";
+import { autenticacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", autenticacion, autorizacion, async (req, res) => {
+router.get("/", autenticacion, async (req, res) => {
   const [alumnos] = await db.execute(
-    "SELECT nombre, apellido, dni FROM alumnos"
+    "SELECT id, nombre, apellido, dni FROM alumnos"
   );
   res.json({ success: true, alumnos });
 });
@@ -19,7 +20,6 @@ router.get("/", autenticacion, autorizacion, async (req, res) => {
 router.get(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {
@@ -42,7 +42,6 @@ router.get(
 router.post(
   "/",
   autenticacion,
-  autorizacion,
   validarAlumnos,
   verificarValidaciones,
   async (req, res) => {
@@ -64,9 +63,8 @@ router.post(
 router.put(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
-  validarAlumnos,
+  validarModificarAlumnos,
   verificarValidaciones,
   async (req, res) => {
     const id = Number(req.params.id);
@@ -99,7 +97,6 @@ router.put(
 router.delete(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {

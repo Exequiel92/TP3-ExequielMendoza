@@ -5,11 +5,11 @@ import {
   validarNotas,
   validarId,
 } from "./validaciones.js";
-import { autenticacion, autorizacion } from "./auth.js";
+import { autenticacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", autenticacion, autorizacion, async (req, res) => {
+router.get("/", autenticacion, async (req, res) => {
   let sql =
     "SELECT n.id, a.nombre AS nombre, a.apellido AS apellido, m.materia AS materia, n.nota1, n.nota2, n.nota3 \
     FROM notas n \
@@ -23,7 +23,6 @@ router.get("/", autenticacion, autorizacion, async (req, res) => {
 router.get(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {
@@ -53,7 +52,6 @@ router.get(
 router.post(
   "/",
   autenticacion,
-  autorizacion,
   validarNotas,
   verificarValidaciones,
   async (req, res) => {
@@ -92,7 +90,6 @@ router.post(
 router.put(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   validarNotas,
   verificarValidaciones,
@@ -140,7 +137,6 @@ router.put(
 router.delete(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {

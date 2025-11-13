@@ -25,11 +25,6 @@ export const autenticacion = passport.authenticate("jwt", {
   session: false,
 });
 
-export const autorizacion = (req, res, next) => {
-  //Todos los usuarios están autorizados
-  next();
-};
-
 router.post("/login", validarLogin, verificarValidaciones, async (req, res) => {
   const { username, contraseña } = req.body;
 
@@ -55,8 +50,6 @@ router.post("/login", validarLogin, verificarValidaciones, async (req, res) => {
 
   const payload = {
     userId: usuarios[0].id,
-    // username: usuarios[0].username,
-    // email: usuarios[0].email,
   };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "4h",

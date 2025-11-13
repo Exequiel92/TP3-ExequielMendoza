@@ -2,15 +2,16 @@ import express from "express";
 import { db } from "./db.js";
 import {
   verificarValidaciones,
+  validarModificarUsuarios,
   validarUsuarios,
   validarId,
 } from "./validaciones.js";
 import bcrypt from "bcrypt";
-import { autenticacion, autorizacion } from "./auth.js";
+import { autenticacion } from "./auth.js";
 
 const router = express.Router();
 
-router.get("/", autenticacion, autorizacion, async (req, res) => {
+router.get("/", autenticacion, async (req, res) => {
   const [usuarios] = await db.execute(
     "SELECT id, username, email FROM usuarios"
   );
@@ -20,7 +21,6 @@ router.get("/", autenticacion, autorizacion, async (req, res) => {
 router.get(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {
@@ -44,7 +44,6 @@ router.get(
 router.post(
   "/",
   autenticacion,
-  autorizacion,
   validarUsuarios,
   verificarValidaciones,
   async (req, res) => {
@@ -68,9 +67,8 @@ router.post(
 router.put(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
-  validarUsuarios,
+  validarModificarUsuarios,
   verificarValidaciones,
   async (req, res) => {
     const id = Number(req.params.id);
@@ -85,12 +83,11 @@ router.put(
         .json({ success: false, message: "Usuario no encontrado" });
     }
 
-    const { username, email, contraseña } = req.body;
-    const hashedPassword = await bcrypt.hash(contraseña, 10);
+    const { username, email } = req.body;
 
     await db.execute(
-      "UPDATE usuarios SET username = ?, email = ?, contraseña = ? WHERE id = ?",
-      [username, email, hashedPassword, id]
+      "UPDATE usuarios SET username = ?, email = ? WHERE id = ?",
+      [username, email, id]
     );
 
     res.json({
@@ -104,7 +101,6 @@ router.put(
 router.delete(
   "/:id",
   autenticacion,
-  autorizacion,
   validarId,
   verificarValidaciones,
   async (req, res) => {

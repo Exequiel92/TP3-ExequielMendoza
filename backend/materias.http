@@ -11,9 +11,9 @@ POST {{url}}/materias
 Content-Type: application/json
 
 {
-  "materia": "Física",
-  "codigo": "FIS",
-  "año": 2024
+  "materia": "Lengua",
+  "codigo": "LEN",
+  "año": 2023
 }
 
 ###

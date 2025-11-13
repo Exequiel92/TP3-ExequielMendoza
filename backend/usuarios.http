@@ -1,28 +1,15 @@
 @url = http://localhost:3000
 
 ### 
-POST {{url}}/auth/login
-Content-Type: application/json
-
-{
-  "username": "exequiel_mendoza",
-  "contraseña": "Exequiel123!"
-}
-
-###
-@token = {{login.response.body.token}}
-
-### 
 GET {{url}}/usuarios
-Authorization: Bearer {{token}}
+
 
 ### 
 GET {{url}}/usuarios/1
-Authorization: Bearer {{token}}
+
 
 ### 
 POST {{url}}/usuarios
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -33,7 +20,6 @@ Content-Type: application/json
 
 ### 
 PUT {{url}}/usuarios/1
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -44,4 +30,5 @@ Content-Type: application/json
 
 ### 
 DELETE {{url}}/usuarios/1
-Authorization: Bearer {{token}}
+
+
