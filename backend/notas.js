@@ -4,6 +4,7 @@ import {
   verificarValidaciones,
   validarNotas,
   validarId,
+  validarModificarNotas,
 } from "./validaciones.js";
 import { autenticacion } from "./auth.js";
 
@@ -91,7 +92,7 @@ router.put(
   "/:id",
   autenticacion,
   validarId,
-  validarNotas,
+  validarModificarNotas,
   verificarValidaciones,
   async (req, res) => {
     const id = Number(req.params.id);
@@ -104,27 +105,16 @@ router.put(
         .json({ success: false, message: "Nota no encontrada" });
     }
 
-    const { alumno_id, materia_id, nota1, nota2, nota3 } = req.body;
+    const { nota1, nota2, nota3 } = req.body;
 
     await db.execute(
-      "UPDATE notas SET alumno_id = ?, materia_id = ?, nota1 = ?, nota2 = ?, nota3 = ? WHERE id = ?",
-      [alumno_id, materia_id, nota1, nota2, nota3, id]
-    );
-
-    const [alumnos] = await db.execute(
-      "SELECT nombre, apellido FROM alumnos WHERE id = ?",
-      [alumno_id]
-    );
-    const [materias] = await db.execute(
-      "SELECT materia FROM materias WHERE id = ?",
-      [materia_id]
+      "UPDATE notas SET nota1 = ?, nota2 = ?, nota3 = ? WHERE id = ?",
+      [nota1, nota2, nota3, id]
     );
 
     res.json({
       success: true,
       data: {
-        alumno: `${alumnos[0].nombre} ${alumnos[0].apellido}`,
-        materia: materias[0].materia,
         nota1,
         nota2,
         nota3,

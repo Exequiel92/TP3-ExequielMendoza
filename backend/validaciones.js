@@ -17,8 +17,8 @@ export const verificarValidaciones = (req, res, next) => {
 
 export const validarAlumnos = [
   body("nombre")
-    .isString()
-    .withMessage("El nombre debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("El nombre debe ser alfabético.")
     .trim()
     .notEmpty()
     .withMessage("El nombre es obligatorio.")
@@ -26,8 +26,8 @@ export const validarAlumnos = [
     .withMessage("El nombre no puede tener más de 45 caracteres."),
 
   body("apellido")
-    .isString()
-    .withMessage("El apellido debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("El apellido debe ser alfabético.")
     .trim()
     .notEmpty()
     .withMessage("El apellido es obligatorio.")
@@ -50,8 +50,8 @@ export const validarAlumnos = [
 
 export const validarMaterias = [
   body("materia")
-    .isString()
-    .withMessage("La materia debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("La materia debe ser una alfaética.")
     .trim()
     .notEmpty()
     .withMessage("La materia es obligatorio.")
@@ -69,8 +69,8 @@ export const validarMaterias = [
     }),
 
   body("codigo")
-    .isString()
-    .withMessage("El código debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("El código debe alfabético.")
     .trim()
     .notEmpty()
     .withMessage("El código es obligatorio.")
@@ -132,7 +132,7 @@ export const validarNotas = [
 
 export const validarUsuarios = [
   body("username")
-    .isAlpha()
+    .isAlpha("es-ES")
     .withMessage("El nombre de usuario debe ser una cadena de texto.")
     .trim()
     .notEmpty()
@@ -185,7 +185,7 @@ export const validarUsuarios = [
 
 export const validarModificarUsuarios = [
   body("username")
-    .isAlpha()
+    .isAlpha("es-ES")
     .withMessage("El nombre de usuario debe ser una cadena de texto.")
     .trim()
     .notEmpty()
@@ -230,8 +230,8 @@ export const validarLogin = [
 
 export const validarModificarAlumnos = [
   body("nombre")
-    .isString()
-    .withMessage("El nombre debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("El nombre debe ser alfabético.")
     .trim()
     .notEmpty()
     .withMessage("El nombre es obligatorio.")
@@ -239,8 +239,8 @@ export const validarModificarAlumnos = [
     .withMessage("El nombre no puede tener más de 45 caracteres."),
 
   body("apellido")
-    .isString()
-    .withMessage("El apellido debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("El apellido debe ser alfabético.")
     .trim()
     .notEmpty()
     .withMessage("El apellido es obligatorio.")
@@ -265,8 +265,8 @@ export const validarModificarAlumnos = [
 
 export const validarModificarMaterias = [
   body("materia")
-    .isString()
-    .withMessage("La materia debe ser una cadena de texto.")
+    .isAlpha("es-ES")
+    .withMessage("La materia debe ser alfabético.")
     .trim()
     .notEmpty()
     .withMessage("La materia es obligatorio.")
@@ -285,7 +285,7 @@ export const validarModificarMaterias = [
     }),
 
   body("codigo")
-    .isString()
+    .isAlpha("es-ES")
     .withMessage("El código debe ser una cadena de texto.")
     .trim()
     .notEmpty()
@@ -309,16 +309,16 @@ export const validarModificarMaterias = [
     .withMessage("El año debe ser un número válido."),
 ];
 
-// export const validarModificarNotas = [
-//   body("nota1")
-//     .isFloat({ min: 0, max: 10 })
-//     .withMessage("La nota 1 debe ser un número entre 0 y 10."),
+export const validarModificarNotas = [
+  body("nota1")
+    .isFloat({ min: 0, max: 10 })
+    .withMessage("La nota 1 debe ser un número entre 0 y 10."),
 
-//   body("nota2")
-//     .isFloat({ min: 0, max: 10 })
-//     .withMessage("La nota 2 debe ser un número entre 0 y 10."),
+  body("nota2")
+    .isFloat({ min: 0, max: 10 })
+    .withMessage("La nota 2 debe ser un número entre 0 y 10."),
 
-//   body("nota3")
-//     .isFloat({ min: 0, max: 10 })
-//     .withMessage("La nota 3 debe ser un número entre 0 y 10."),
-// ];
+  body("nota3")
+    .isFloat({ min: 0, max: 10 })
+    .withMessage("La nota 3 debe ser un número entre 0 y 10."),
+];
