@@ -43,20 +43,42 @@ export const AuthProvider = ({ children }) => {
 
   const fetchAuth = async (url, options = {}) => {
     if (!token) {
-      throw new Error("Inicie sesión");
+      throw new Error("¡Por favor, iniciar sesión!Inicie sesión!");
     }
+
+    const defaultHeaders = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
 
     return fetch(url, {
       ...options,
-      headers: { ...options.headers, Authorization: `Bearer ${token}` },
+      headers: { ...defaultHeaders, ...options.headers },
     });
   };
 
   return (
     <AuthContext.Provider
-      value={{ token, username, error, login, logout, fetchAuth }}
+      value={{
+        token,
+        username,
+        error,
+        autenticado: !!token,
+        login,
+        logout,
+        fetchAuth,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const Autenticar = ({ children }) => {
+  const { autenticado } = useAuth();
+
+  if (!autenticado) {
+    return <h1>¡Por favor, iniciar sesión!</h1>;
+  }
+  return children;
 };
