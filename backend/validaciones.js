@@ -18,7 +18,7 @@ export const verificarValidaciones = (req, res, next) => {
 export const validarAlumnos = [
   body("nombre")
     .isAlpha("es-ES")
-    .withMessage("El nombre debe ser alfabético.")
+    .withMessage("El nombre debe ser alfabético y no puede contener espacios.")
     .trim()
     .notEmpty()
     .withMessage("El nombre es obligatorio.")
@@ -27,7 +27,9 @@ export const validarAlumnos = [
 
   body("apellido")
     .isAlpha("es-ES")
-    .withMessage("El apellido debe ser alfabético.")
+    .withMessage(
+      "El apellido debe ser alfabético y no puede contener espacios."
+    )
     .trim()
     .notEmpty()
     .withMessage("El apellido es obligatorio.")
@@ -35,8 +37,8 @@ export const validarAlumnos = [
     .withMessage("El apellido no puede tener más de 45 caracteres."),
 
   body("dni")
-    .isInt({ min: 1, max: 99999999 })
-    .withMessage("El DNI debe ser un número válido de hasta 8 dígitos.")
+    .isInt({ min: 1000000, max: 99999999 })
+    .withMessage("El DNI debe ser un número válido y hasta 8 dígitos.")
     .custom(async (dni) => {
       const [rows] = await db.execute("SELECT id FROM alumnos WHERE dni = ?", [
         dni,
@@ -51,10 +53,10 @@ export const validarAlumnos = [
 export const validarMaterias = [
   body("materia")
     .isAlpha("es-ES")
-    .withMessage("La materia debe ser una alfaética.")
+    .withMessage("La materia debe ser alfabética y sin espacios.")
     .trim()
     .notEmpty()
-    .withMessage("La materia es obligatorio.")
+    .withMessage("La materia es obligatoria.")
     .isLength({ max: 45 })
     .withMessage("La materia no puede tener más de 45 caracteres.")
     .custom(async (materia) => {
@@ -70,19 +72,19 @@ export const validarMaterias = [
 
   body("codigo")
     .isAlpha("es-ES")
-    .withMessage("El código debe alfabético.")
+    .withMessage("El código debe ser alfabético y sin espacios.")
     .trim()
     .notEmpty()
     .withMessage("El código es obligatorio.")
-    .isLength({ max: 3 })
-    .withMessage("El código no puede tener más de 3 caracteres.")
+    .isLength({ min: 3, max: 3 })
+    .withMessage("El código debe tener 3 caracteres.")
     .custom(async (codigo) => {
       const [rows] = await db.execute(
         "SELECT id FROM materias WHERE codigo = ?",
         [codigo]
       );
       if (rows.length > 0) {
-        throw new Error("Código ya registrado");
+        throw new Error("Código ya registrado.");
       }
       return true;
     }),
@@ -133,7 +135,7 @@ export const validarNotas = [
 export const validarUsuarios = [
   body("username")
     .isAlpha("es-ES")
-    .withMessage("El nombre de usuario debe ser una cadena de texto.")
+    .withMessage("El nombre de usuario debe ser alfabético y sin espacios.")
     .trim()
     .notEmpty()
     .withMessage("El nombre de usuario es obligatorio.")
@@ -224,8 +226,8 @@ export const validarModificarUsuarios = [
 ];
 
 export const validarLogin = [
-  body("username").notEmpty().withMessage("El username es obligatorio"),
-  body("contraseña").notEmpty().withMessage("La contraseña es obligatoria"),
+  body("username").notEmpty().withMessage("El username es obligatorio."),
+  body("contraseña").notEmpty().withMessage("La contraseña es obligatoria."),
 ];
 
 export const validarModificarAlumnos = [
