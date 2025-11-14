@@ -1,0 +1,307 @@
+/*
+ * STYLES.CSS
+ * Tema profesional verde para la aplicación de gestión
+ * Anula el modo oscuro por defecto de PicoCSS.
+ */
+
+/* ------------------------------------------------------------------
+   1. DEFINICIÓN DE LA PALETA DE COLORES
+   ------------------------------------------------------------------ */
+:root {
+  /* --- Paleta Verde Profesional --- */
+  --color-green-dark: #1e8449;
+  --color-green-primary: #27ae60;
+  --color-green-light: #2ecc71;
+  --color-green-faded: #e9f7ef;
+
+  /* --- Paleta de Peligro --- */
+  --color-red-dark: #c0392b;
+  --color-red-primary: #e74c3c;
+  --color-red-faded: rgba(231, 76, 60, 0.1);
+
+  /* --- Paleta de Fondos y Texto --- */
+  --color-bg-page: #f8f9fa; /* Fondo de página gris claro */
+  --color-bg-card: #ffffff; /* Fondo de tarjeta blanco */
+  --color-text-dark: #222222; /* Texto principal oscuro */
+  --color-text-light: #ffffff; /* Texto sobre fondos oscuro */
+  --color-border-soft: #d1d5db; /* Borde gris suave */
+  --color-border-table: #e0e0e0;
+}
+
+/* ------------------------------------------------------------------
+   2. APLICACIÓN DEL TEMA (MODO CLARO Y MODO OSCURO)
+   ------------------------------------------------------------------ */
+
+:root:not([data-theme="dark"]),
+[data-theme="dark"] {
+  /* --- Fondo y Texto --- */
+  --pico-background-color: var(--color-bg-page);
+  --pico-color: var(--color-text-dark);
+  --pico-secondary: var(--color-border-soft);
+
+  /* --- Color Primario (Botones, Links, Focus) --- */
+  --pico-primary: var(--color-green-primary);
+  --pico-primary-hover: var(--color-green-light);
+  --pico-primary-focus: rgba(39, 174, 96, 0.25);
+  --pico-primary-inverse: var(--color-text-light);
+
+  /* --- Color Destructivo (Botones Eliminar) --- */
+  --pico-destructive: var(--color-red-primary);
+  --pico-destructive-hover: var(--color-red-dark);
+  --pico-destructive-focus: rgba(231, 76, 60, 0.25);
+  --pico-destructive-inverse: var(--color-text-light);
+
+  /* --- Tarjetas (<article>) --- */
+  --pico-card-background-color: var(--color-bg-card);
+  --pico-card-border-color: var(--color-border-soft);
+  --pico-card-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  --pico-card-padding: 1.5rem;
+  --pico-card-border-radius: 0.5rem;
+
+  /* --- Tablas --- */
+  --pico-table-border-color: var(--color-border-table);
+  --pico-table-header-background-color: var(--color-green-dark);
+  --pico-table-header-color: var(--color-text-light);
+  --pico-table-row-stripped-background-color: var(--color-green-faded);
+
+  /* --- Títulos (h1, h2, etc.) --- */
+  --pico-h1-color: var(--color-green-dark);
+  --pico-h2-color: var(--color-green-dark);
+  --pico-h3-color: var(--color-green-dark);
+}
+
+/* ------------------------------------------------------------------
+   3. ESTILOS DE LAYOUT Y NAVEGACIÓN (Layout.jsx)
+   ------------------------------------------------------------------ */
+
+body {
+  background-color: var(--pico-background-color);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-itemss: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border-table);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--pico-card-border-radius);
+  margin-bottom: 1.5rem;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav > li {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+}
+
+nav ul li a {
+  font-weight: 600;
+  color: var(--color-green-dark);
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+nav ul li a:hover,
+nav ul li a:focus {
+  background-color: var(--color-green-faded);
+  color: var(--pico-primary);
+  outline: none;
+}
+
+nav > li > a[role="button"],
+nav > li > button {
+  background-color: var(--pico-primary);
+  color: var(--pico-primary-inverse);
+  border-color: var(--pico-primary);
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+nav > li > a[role="button"]:hover,
+nav > li > button:hover {
+  background-color: var(--pico-primary-hover);
+  border-color: var(--pico-primary-hover);
+}
+
+/* ------------------------------------------------------------------
+   4. ESTILOS DE TABLAS Y BOTONES DE ACCIÓN
+   ------------------------------------------------------------------ */
+
+h1 {
+  border-bottom: 3px solid var(--color-green-faded);
+  padding-bottom: 0.5rem;
+}
+
+article h2 {
+  border-bottom: 2px solid var(--color-green-faded);
+  padding-bottom: 0.5rem;
+}
+
+main > article > h1 {
+  text-align: center;
+  margin: 0;
+  background-color: transparent;
+}
+
+table th {
+  text-align: left;
+  background-color: var(--pico-table-header-background-color);
+  color: var(--pico-table-header-color) !important;
+  border: none;
+}
+
+table td {
+  vertical-align: middle;
+}
+
+table td a[role="button"],
+table td button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+table td a[role="button"] {
+  color: var(--color-green-primary);
+}
+table td a[role="button"]:hover {
+  background-color: var(--color-green-faded);
+  color: var(--color-green-dark);
+}
+
+table td button {
+  color: var(--color-red-primary);
+}
+table td button:hover {
+  background-color: var(--color-red-faded);
+  color: var(--color-red-dark);
+}
+
+/* ------------------------------------------------------------------
+   5. BOTONES AZULES (Solución de Especificidad)
+   ------------------------------------------------------------------ */
+
+/* * Regla 5.1: Botones <a role="button"> (ej. "Nuevo usuario")
+ * Y <input type="submit"> en PÁGINAS (ej. "Crear usuario")
+ */
+[data-theme="dark"] a[role="button"],
+[data-theme="dark"] article:not(dialog article) form input[type="submit"] {
+  background-color: var(--pico-primary) !important;
+  color: var(--pico-primary-inverse) !important;
+  border-color: var(--pico-primary) !important;
+}
+[data-theme="dark"] a[role="button"]:hover,
+[data-theme="dark"]
+  article:not(dialog article)
+  form
+  input[type="submit"]:hover {
+  background-color: var(--pico-primary-hover) !important;
+  border-color: var(--pico-primary-hover) !important;
+}
+
+/* Sizing para botones de página (sin [data-theme]) */
+article:not(dialog article) form input[type="submit"] {
+  width: 100%;
+  padding: 0.75rem;
+}
+
+/* * Regla 5.2: Botones <input type="submit"> en MODALES (ej. "Ingresar")
+ * Esta regla es MÁS específica y anula la de Pico.
+ */
+[data-theme="dark"] dialog article footer input[type="submit"] {
+  background-color: var(--pico-primary) !important;
+  color: var(--pico-primary-inverse) !important;
+  border-color: var(--pico-primary) !important;
+  width: auto; /* Ancho automático para modal */
+  padding: 0.625rem 1.25rem; /* Padding de modal */
+}
+[data-theme="dark"] dialog article footer input[type="submit"]:hover {
+  background-color: var(--pico-primary-hover) !important;
+  border-color: var(--pico-primary-hover) !important;
+}
+
+/* * Regla 5.3: Botones "Cancelar" del MODAL
+ */
+[data-theme="dark"] dialog article footer input[type="button"].secondary {
+  background-color: var(--color-bg-card) !important;
+  color: var(--pico-primary) !important;
+  border-color: var(--pico-primary) !important;
+  width: auto;
+  padding: 0.625rem 1.25rem;
+}
+[data-theme="dark"] dialog article footer input[type="button"].secondary:hover {
+  background-color: var(--color-green-faded) !important;
+  color: var(--color-green-dark) !important;
+  border-color: var(--color-green-dark) !important;
+}
+
+/* ------------------------------------------------------------------
+   6. INPUTS NEGROS (Solución Definitiva)
+   ------------------------------------------------------------------ */
+/* * Anulamos las reglas globales de Pico Y las reglas de dialog
+ */
+
+/* Regla 6.1: Anulación global (PÁGINAS) */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] input[type="password"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-dark) !important;
+  border-color: var(--color-border-soft) !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] input[type="text"]:focus,
+[data-theme="dark"] input[type="email"]:focus,
+[data-theme="dark"] input[type="password"]:focus,
+[data-theme="dark"] input[type="number"]:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-dark) !important;
+  border-color: var(--pico-primary) !important;
+  box-shadow: 0 0 0 0.125rem var(--pico-primary-focus) !important;
+}
+
+/* Regla 6.2: Anulación específica (MODALES) */
+[data-theme="dark"] dialog article input[type="text"],
+[data-theme="dark"] dialog article input[type="email"],
+[data-theme="dark"] dialog article input[type="password"] {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-dark) !important;
+  border-color: var(--color-border-soft) !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] dialog article input[type="text"]:focus,
+[data-theme="dark"] dialog article input[type="email"]:focus,
+[data-theme="dark"] dialog article input[type="password"]:focus {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-dark) !important;
+  border-color: var(--pico-primary) !important;
+  box-shadow: 0 0 0 0.125rem var(--pico-primary-focus) !important;
+}
