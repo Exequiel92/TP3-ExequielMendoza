@@ -45,6 +45,7 @@ export function Usuarios() {
       </Link>
       <table>
         <thead>
+          <br />
           <tr>
             <th>ID</th>
             <th>Usuario</th>

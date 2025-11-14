@@ -47,6 +47,7 @@ export function Alumnos() {
       </Link>
       <table>
         <thead>
+          <br />
           <tr>
             <th>ID</th>
             <th>Nombre</th>

@@ -57,7 +57,7 @@ export const CrearMateria = () => {
                 {errores
                   .filter((e) => e.path === "materia")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -70,17 +70,32 @@ export const CrearMateria = () => {
               onChange={(e) => setValues({ ...values, codigo: e.target.value })}
               aria-invalid={errores && errores.some((e) => e.path === "codigo")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "codigo")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
 
           <label>
             Año
             <input
               required
-              type="number"
               value={values.año}
               onChange={(e) => setValues({ ...values, año: e.target.value })}
               aria-invalid={errores && errores.some((e) => e.path === "año")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "año")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
         </fieldset>
         <input type="submit" value="Crear materia" />

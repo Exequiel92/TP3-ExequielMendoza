@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "./Auth";
-import "./ingresar.css";
 
 export const Ingresar = () => {
   const { error, login } = useAuth();
@@ -16,19 +15,19 @@ export const Ingresar = () => {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>Iniciar sesión</button>
+      <button onClick={() => setOpen(true)}>Acceder</button>
       <dialog open={open}>
         <article>
           <h2>Ingresar usuario y contraseña</h2>
           <form onSubmit={handleSubmit}>
             <fieldset>
-              <label htmlFor="username">Usuario:</label>
+              <label htmlFor="username">Usuario</label>
               <input
                 name="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <label htmlFor="contraseña">Contraseña:</label>
+              <label htmlFor="contraseña">Contraseña</label>
               <input
                 name="contraseña"
                 type="password"

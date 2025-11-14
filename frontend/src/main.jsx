@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@picocss/pico";
-import "./ingresar.css";
+import "./styles.css";
 import { Layout } from "./Layout.jsx";
 import { Home } from "./Home.jsx";
 import { Autenticar, AuthProvider } from "./Auth.jsx";

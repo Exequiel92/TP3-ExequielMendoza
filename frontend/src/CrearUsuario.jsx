@@ -57,7 +57,7 @@ export const CrearUsuario = () => {
                 {errores
                   .filter((e) => e.path === "username")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -75,7 +75,7 @@ export const CrearUsuario = () => {
                 {errores
                   .filter((e) => e.path === "email")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -98,7 +98,7 @@ export const CrearUsuario = () => {
                 {errores
                   .filter((e) => e.path === "contraseña")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>

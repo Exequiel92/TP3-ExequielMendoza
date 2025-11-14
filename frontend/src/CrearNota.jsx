@@ -92,7 +92,7 @@ export const CrearNota = () => {
                 {errores
                   .filter((e) => e.path === "alumno_id")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -123,7 +123,7 @@ export const CrearNota = () => {
                 {errores
                   .filter((e) => e.path === "materia_id")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -132,38 +132,52 @@ export const CrearNota = () => {
             Nota 1
             <input
               required
-              type="number"
-              step="0.01"
-              min="0"
-              max="10"
               value={values.nota1}
               onChange={(e) => setValues({ ...values, nota1: e.target.value })}
+              aria-invalid={errores && errores.some((e) => e.path === "nota1")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "nota1")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
-          {/* Repetir para nota2 y nota3 */}
           <label>
             Nota 2
             <input
               required
-              type="number"
-              step="0.01"
-              min="0"
-              max="10"
               value={values.nota2}
               onChange={(e) => setValues({ ...values, nota2: e.target.value })}
+              aria-invalid={errores && errores.some((e) => e.path === "nota2")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "nota2")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
           <label>
             Nota 3
             <input
               required
-              type="number"
-              step="0.01"
-              min="0"
-              max="10"
               value={values.nota3}
               onChange={(e) => setValues({ ...values, nota3: e.target.value })}
+              aria-invalid={errores && errores.some((e) => e.path === "nota3")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "nota3")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
         </fieldset>
         <input type="submit" value="Crear nota" />

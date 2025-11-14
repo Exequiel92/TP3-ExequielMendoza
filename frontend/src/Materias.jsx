@@ -43,10 +43,11 @@ export function Materias() {
     <>
       <h1>Materias</h1>
       <Link role="button" to="/materias/crear">
-        Nueva maternia
+        Nueva materia
       </Link>
       <table>
         <thead>
+          <br />
           <tr>
             <th>ID</th>
             <th>Materia</th>

@@ -53,7 +53,7 @@ export const CrearAlumno = () => {
                 {errores
                   .filter((e) => e.path === "nombre")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -75,7 +75,7 @@ export const CrearAlumno = () => {
                 {errores
                   .filter((e) => e.path === "apellido")
                   .map((e) => e.msg)
-                  .join(", ")}
+                  .join(" ")}
               </small>
             )}
           </label>
@@ -84,11 +84,18 @@ export const CrearAlumno = () => {
             DNI
             <input
               required
-              type="number"
               value={values.dni}
               onChange={(e) => setValues({ ...values, dni: e.target.value })}
               aria-invalid={errores && errores.some((e) => e.path === "dni")}
             />
+            {errores && (
+              <small>
+                {errores
+                  .filter((e) => e.path === "dni")
+                  .map((e) => e.msg)
+                  .join(" ")}
+              </small>
+            )}
           </label>
         </fieldset>
         <input type="submit" value="Crear alumno" />

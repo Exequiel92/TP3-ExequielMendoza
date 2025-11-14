@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router";
 import { useAuth } from "./Auth";
 import { Ingresar } from "./Ingresar";
+import { Registrar } from "./Registrar";
 
 export const Layout = () => {
   const { username, logout } = useAuth();
@@ -9,6 +10,7 @@ export const Layout = () => {
     <main className="container">
       <nav>
         <ul>
+          <li></li>
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -27,9 +29,11 @@ export const Layout = () => {
         </ul>
         <li>
           {username ? (
-            <button onClick={() => logout()}>Salir</button>
+            <button onClick={logout}>Salir</button>
           ) : (
-            <Ingresar />
+            <>
+              <Ingresar /> <Registrar />
+            </>
           )}
         </li>
       </nav>
