@@ -49,7 +49,7 @@ export function Usuarios() {
           <tr>
             <th>ID</th>
             <th>Usuario</th>
-            <th>Correo electronico</th>
+            <th>Correo electrónico</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </tr>
